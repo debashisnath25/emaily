@@ -1,0 +1,19 @@
+Node:
+To install node packages.json: npm install init
+To install express: npm install express --save
+To install nodemon: npm install nodemon -g
+
+To start server: node <base filename>
+To stop server: ^C
+
+Installing Heroku: 
+1. Add engines in package.json under "main" for different servers:
+
+// FOR Heroku
+"engines": {
+    "node": "8.1.1",
+    "npm": "5.0.3"
+}
+
+2. website: https://murmuring-wave-28589.herokuapp.com/
+   git: https://git.heroku.com/murmuring-wave-28589.git
