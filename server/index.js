@@ -1,13 +1,17 @@
 const express = require('express');
-//const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const keys = require('./config/keys');
+require('./models/Users');
 require('./services/passport');
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
-/* Mongoose starts
-  mongoose.connect(keys.mongoURI);
-Mongoose ends */
+/* Mongoose starts */
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true },function(err, db) {
+if (err) throw err;
+    console.log("Database connected!");
+});
+/* Mongoose ends [Mongoose model class: 38] */
 
 /* Basic Introduction starts
  app.get('/', (req, res) => {

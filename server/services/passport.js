@@ -1,8 +1,14 @@
 const Passport = require('passport');
-const FacebookStrategy = require('passport-facebook').Strategy;
+const mongoose = require('mongoose');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('../config/keys');
 
-/* Google authenticate starts
+const User = mongoose.model('users');
+
+/* Google authenticate starts */
+Passport.serializeUser((user, done)=>{
+    done(null,user.id);
+});
 Passport.use(new GoogleStrategy(
     {
       clientID: keys.googleClientID,
@@ -10,15 +16,27 @@ Passport.use(new GoogleStrategy(
       callbackURL: '/auth/google/callback'
     },
     (accessToken, refreshToken, profile, done)=> {
-      console.log('access token',accessToken);
-      console.log('refresh token',refreshToken);
-      console.log('profile',profile);
+      User.findOne({ googleId: profile.id })
+      .then((existingUser) => {
+        if(existingUser){
+            // user already exist
+            done(null,existingUser);
+        }else{
+          // no user exist for this profile ID
+          new User({ googleId: profile.id })
+          .save()
+          .then(user => done(null,user));
+
+        }
+      })
+
+      //console.log(profile.id);
     }
   )
 );
-Google authenticate ends */
+/* Google authenticate ends */
 
-/*Facebook config is our configuration variable. starts*/
+/*Facebook config is our configuration variable. starts
 Passport.use(new FacebookStrategy({
     clientID: keys.facebookClientID,
     clientSecret:keys.facebookClientSecret ,
@@ -30,4 +48,4 @@ Passport.use(new FacebookStrategy({
     console.log('profile',profile);
   }
 ));
-/*Facebook config is our configuration variable. ends*/
+Facebook config is our configuration variable. ends*/
