@@ -8,7 +8,6 @@ const app = express();
 app.get('/', (req, res) => {
   res.send({ Bye: "sdaad" });
 });
-const PORT = process.env.PORT || 5000;
 Basic Introduction Ends*/
 
 /* Passport Google Oauth starts */
@@ -36,6 +35,6 @@ app.get(
 
 app.get('/auth/google/callback', Passport.authenticate('google'));
 /* Passport Google Oauth Ends */
-
+const PORT = process.env.PORT || 5000;
 // console.log('Listening to '+ PORT);
-app.listen(5000);
+app.listen(PORT);
