@@ -1,40 +1,21 @@
 const express = require('express');
-const Passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
+require('./services/passport');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
-
+mongoose.connect(keys.mongoURI);
 /* Basic Introduction starts
-app.get('/', (req, res) => {
+ app.get('/', (req, res) => {
   res.send({ Bye: "sdaad" });
 });
 Basic Introduction Ends*/
 
 /* Passport Google Oauth starts */
-const keys = require('../config/keys');
-Passport.use(new GoogleStrategy(
-    {
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback'
-    },
-    (accessToken, refreshToken, profile, done)=> {
-      console.log('access token',accessToken);
-      console.log('refresh token',refreshToken);
-      console.log('profile',profile);
-    }
-  )
-);
-
-app.get(
-  '/auth/google',
-  Passport.authenticate ('google',{
-    scope: ['profile','email']
-  })
-);
-
-app.get('/auth/google/callback', Passport.authenticate('google'));
+  authRoutes(app);
 /* Passport Google Oauth Ends */
+
 const PORT = process.env.PORT || 5000;
 // console.log('Listening to '+ PORT);
 app.listen(PORT);
